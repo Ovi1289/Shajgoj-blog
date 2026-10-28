@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop Autopilot</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap row">
+    <strong id="shopName">Shop Autopilot</strong>
+    <nav class="tabs">
+      <button data-tab="auto" class="on">⚡ Autopilot</button>
+      <button data-tab="steps">ধাপে ধাপে</button>
+      <button data-tab="library">পণ্য / পোস্ট / অ্যাড</button>
+    </nav>
+    <a id="shopLink" href="/" target="_blank" class="muted small">শপ দেখুন ↗</a>
+  </div>
+  <div id="modeBanner" class="banner" hidden></div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============================== AUTOPILOT ============================== -->
+  <section id="tab-auto" class="tab">
+    <form id="autoForm" class="card">
+      <h2>এক ক্লিকে: ছবি → ওয়েবসাইট → ক্রিয়েটিভ → পোস্ট → অ্যাড</h2>
+
+      <div class="photo-pick">
+        <label class="pick"><input type="file" name="camera" accept="image/*" capture="environment" hidden>📷 ছবি তুলুন</label>
+        <label class="pick"><input type="file" name="gallery" accept="image/*" multiple hidden>🖼️ গ্যালারি থেকে</label>
+      </div>
+      <div class="thumbs" data-thumbs></div>
+
+      <div class="grid2">
+        <label>বিক্রয় মূল্য (৳)<input name="price" type="number" min="0" step="1" placeholder="খালি রাখলে MRP"></label>
+        <label>অফার (ঐচ্ছিক)<input name="offer" placeholder="যেমন: ১০% ছাড়, ফ্রি ডেলিভারি"></label>
+      </div>
+      <label>নোট (ঐচ্ছিক)<input name="hint" placeholder="যেমন: অরিজিনাল কোরিয়ান প্রোডাক্ট, স্টকে ২০টি"></label>
+
+      <fieldset>
+        <legend>ফেসবুক পোস্ট</legend>
+        <div class="grid2">
+          <label>পোস্টের সময়<input name="publishAt" type="datetime-local"><small class="muted">খালি = এখনই পোস্ট</small></label>
+          <label>ক্যাপশনের ভাষা
+            <select name="captionLanguage"><option value="bn">বাংলা</option><option value="en">English</option></select>
+          </label>
+        </div>
+        <label>ক্রিয়েটিভ স্টাইল
+          <select name="template"><option value="spotlight">Spotlight</option><option value="split">Split</option><option value="minimal">Minimal</option></select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend><label class="inline"><input type="checkbox" name="runAd" checked> এই পোস্ট থেকে অ্যাড চালান</label></legend>
+        <div data-ad-fields>
+          <div class="grid3">
+            <label>বাজেট ($)<input name="budget" type="number" min="1" step="1" value="10"></label>
+            <label>বাজেটের ধরন
+              <select name="budgetType"><option value="lifetime">মোট (পুরো সময়ে)</option><option value="daily">প্রতিদিন</option></select>
+            </label>
+            <label>লক্ষ্য
+              <select name="goal"><option value="engagement">Engagement</option><option value="reach">Reach</option></select>
+            </label>
+          </div>
+          <div class="grid2">
+            <label>শুরুর তারিখ<input name="adStart" type="date"></label>
+            <label>শেষ তারিখ<input name="adEnd" type="date"></label>
+          </div>
+          <label>অডিয়েন্স (নিজের ভাষায় লিখুন)
+            <textarea name="audience" rows="2" placeholder="যেমন: ঢাকা আর চট্টগ্রামের ১৮-৩৫ বছরের মেয়েরা যারা স্কিনকেয়ার আর মেকআপ পছন্দ করে"></textarea>
+          </label>
+        </div>
+      </fieldset>
+
+      <button class="primary big" type="submit">⚡ সব কাজ শুরু করুন</button>
+    </form>
+
+    <ol id="autoLog" class="log" hidden></ol>
+    <div id="autoResult"></div>
+  </section>
+
+  <!-- ============================== STEP BY STEP ============================== -->
+  <section id="tab-steps" class="tab" hidden>
+    <div class="card">
+      <h2>১. ছবি তুলুন বা আপলোড করুন</h2>
+      <form id="analyzeForm">
+        <div class="photo-pick">
+          <label class="pick"><input type="file" name="camera" accept="image/*" capture="environment" hidden>📷 ছবি তুলুন</label>
+          <label class="pick"><input type="file" name="gallery" accept="image/*" multiple hidden>🖼️ গ্যালারি থেকে</label>
+        </div>
+        <div class="thumbs" data-thumbs></div>
+        <div class="grid2">
+          <label>বিক্রয় মূল্য (৳)<input name="price" type="number" min="0"></label>
+          <label>নোট (ঐচ্ছিক)<input name="hint"></label>
+        </div>
+        <button class="primary" type="submit">AI দিয়ে ব্যাকগ্রাউন্ড রিমুভ + তথ্য বের করুন</button>
+      </form>
+    </div>
+
+    <div id="stepProduct" class="card" hidden>
+      <h2>২. পণ্যের তথ্য যাচাই করুন</h2>
+      <div class="product-edit">
+        <div class="imgs">
+          <img data-main alt="">
+          <a data-cutout target="_blank" class="small">ব্যাকগ্রাউন্ড ছাড়া PNG ↓</a>
+        </div>
+        <form id="productForm" class="fields"></form>
+      </div>
+      <div class="row gap">
+        <button id="saveProduct">সেভ করুন</button>
+        <button id="publishProduct" class="primary">ওয়েবসাইটে প্রকাশ করুন</button>
+        <a id="productLive" target="_blank" hidden>ওয়েবসাইটে দেখুন ↗</a>
+      </div>
+    </div>
+
+    <div id="stepCreative" class="card" hidden>
+      <h2>৩. AI ক্রিয়েটিভ</h2>
+      <div class="grid3">
+        <label>অফার<input id="creativeOffer" placeholder="ঐচ্ছিক"></label>
+        <label>ক্রিয়েটিভের ভাষা<select id="creativeLang"><option value="en">English</option><option value="bn">বাংলা</option></select></label>
+        <label>&nbsp;<button id="makeCreatives" class="primary">ক্রিয়েটিভ বানান</button></label>
+      </div>
+      <div id="creatives" class="creatives"></div>
+    </div>
+
+    <div id="stepCaption" class="card" hidden>
+      <h2>৪. ফেসবুক ক্যাপশন</h2>
+      <div class="grid3">
+        <label>টোন<select id="captionTone"><option value="friendly">Friendly</option><option value="premium">Premium</option><option value="urgent offer">Offer/Urgent</option><option value="funny">Funny</option></select></label>
+        <label>ভাষা<select id="captionLang"><option value="bn">বাংলা</option><option value="en">English</option></select></label>
+        <label>&nbsp;<button id="makeCaption" class="primary">ক্যাপশন লিখুন</button></label>
+      </div>
+      <textarea id="caption" rows="8" placeholder="ক্যাপশন এখানে আসবে — চাইলে এডিট করুন"></textarea>
+    </div>
+
+    <div id="stepPost" class="card" hidden>
+      <h2>৫. পোস্ট শিডিউল</h2>
+      <div class="grid2">
+        <label>পোস্টের সময়<input id="postAt" type="datetime-local"><small class="muted">খালি = এখনই</small></label>
+        <label>&nbsp;<button id="doPost" class="primary">ফেসবুকে পোস্ট / শিডিউল</button></label>
+      </div>
+      <div id="postResult"></div>
+    </div>
+
+    <div id="stepAd" class="card" hidden>
+      <h2>৬. পোস্ট থেকে অ্যাড চালান</h2>
+      <div class="grid3">
+        <label>বাজেট ($)<input id="adBudget" type="number" min="1" value="10"></label>
+        <label>ধরন<select id="adBudgetType"><option value="lifetime">মোট</option><option value="daily">প্রতিদিন</option></select></label>
+        <label>লক্ষ্য<select id="adGoal"><option value="engagement">Engagement</option><option value="reach">Reach</option></select></label>
+      </div>
+      <div class="grid2">
+        <label>শুরু<input id="adStart" type="date"></label>
+        <label>শেষ<input id="adEnd" type="date"></label>
+      </div>
+      <label>অডিয়েন্স<textarea id="adAudience" rows="2" placeholder="যেমন: ঢাকার ২০-৪০ বছরের নারী, বিউটি ও স্কিনকেয়ারে আগ্রহী"></textarea></label>
+      <div class="row gap">
+        <button id="previewAudience">অডিয়েন্স দেখুন</button>
+        <button id="launchAd" class="primary" disabled>অ্যাড চালু করুন</button>
+      </div>
+      <div id="audiencePreview"></div>
+      <div id="adResult"></div>
+    </div>
+  </section>
+
+  <!-- ============================== LIBRARY ============================== -->
+  <section id="tab-library" class="tab" hidden>
+    <div class="card"><h2>অ্যাড</h2><div id="adsList"></div></div>
+    <div class="card"><h2>পোস্ট</h2><div id="postsList"></div></div>
+    <div class="card"><h2>পণ্য</h2><div id="productsList"></div></div>
+  </section>
+</main>
+
+<div id="toast" class="toast" hidden></div>
+<script src="app.js" type="module"></script>
+</body>
+</html>
